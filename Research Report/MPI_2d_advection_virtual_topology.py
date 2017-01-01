@@ -1,5 +1,6 @@
 #!~/anaconda2/bin/python
 #example to run: mpiexec -n 4 python MPI_2d_advection_virtual_topology.py 2 2 or mpirun -n 4 python MPI_2d_advection_virtual_topology.py 2 2
+#parallel 2d advection solver using upwind method
 import numpy
 import sys
 from mpi4py import MPI
@@ -100,10 +101,10 @@ local_Q_old[-1,:] = local_Q_old[-2,:]
 #neighbor data exchange
 comm.Barrier()
 if rank == 0:
-	end_init = MPI.Wtime()
+	end_init = MPI.Wtime() #time inilization
 	print('Parallel Initialization runs for {} seconds'.format(end_init - start))
 	collect = 0.0
-	data_exchange_start = MPI.Wtime()
+	data_exchange_start = MPI.Wtime() #time data exchange 
 	data_exchange = 0.0
 
 if neighbor_processes[up] >= 0:
@@ -170,9 +171,9 @@ if neighbor_processes[down] >= 0 and neighbor_processes[left] >= 0:
 
 comm.Barrier()
 if rank == 0:
-	data_exchange += MPI.Wtime() - data_exchange_start
-	concurrent_start = MPI.Wtime()
-	concurrent = 0.0
+	data_exchange += MPI.Wtime() - data_exchange_start #time data exchange
+	concurrent_start = MPI.Wtime() #time concurrent computations
+	concurrent = 0.0 #time concurrent computations
 
 #update cell average:
 local_Q_new = local_Q_old.copy()
@@ -188,8 +189,8 @@ while t <= T+1e-6:
 	#collect data from other processes
 	comm.Barrier()
 	if rank == 0:
-		concurrent += MPI.Wtime() - concurrent_start
-		collect_start = MPI.Wtime()
+		concurrent += MPI.Wtime() - concurrent_start #time concurent computations
+		collect_start = MPI.Wtime()                  #time data collection
 		Q_new = local_Q_new[1:-1,1:-1]
 		data={'0':Q_new}
 		for pid in range(1,size):
@@ -207,7 +208,7 @@ while t <= T+1e-6:
 		Q_new = numpy.concatenate(list(Q_new), axis=0)
 		results.append(Q_new)
 
-		collect += MPI.Wtime() - collect_start
+		collect += MPI.Wtime() - collect_start #time data collection
 
 	else:
 		send_buffer = local_Q_new[1:-1,1:-1]
@@ -290,8 +291,8 @@ while t <= T+1e-6:
 	t += dt
 	comm.Barrier()
 	if rank == 0:
-		data_exchange += MPI.Wtime() - data_exchange_start
-		concurrent_start = MPI.Wtime()
+		data_exchange += MPI.Wtime() - data_exchange_start #time data exchange
+		concurrent_start = MPI.Wtime() #time concurrent computations
 
 
 if rank == 0:
