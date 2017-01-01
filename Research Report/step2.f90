@@ -48,7 +48,7 @@
 !f2py real(DP) x
 !f2py x=rpn2(x)
 !f2py x=rpt2(x)
-time0 = omp_get_wtime()
+time0 = omp_get_wtime() !time the subrountine
 !    !$omp parallel
 !    !$omp single
 !        nthreads = omp_get_num_threads()
@@ -88,7 +88,7 @@ time0 = omp_get_wtime()
         end do
     endif
 
-time1 = omp_get_wtime()
+time1 = omp_get_wtime() !time x-sweeps
 !     # perform x-sweeps
 !     ==================
 !$omp parallel do default(shared) private(j,i,m,q1d,dtdx1d,ma,aux1,aux2,aux3,jcom,qadd,fadd,gadd,cfl1d,work) reduction(max:cfl)
@@ -169,7 +169,7 @@ time1 = omp_get_wtime()
 !$omp end parallel do
 time2 = omp_get_wtime() - time1
 
-time3 = omp_get_wtime()
+time3 = omp_get_wtime() !time y-sweeps
 !     # perform y sweeps
 !     ==================
 

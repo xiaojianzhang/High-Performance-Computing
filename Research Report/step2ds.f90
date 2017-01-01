@@ -49,7 +49,7 @@
 !f2py real(DP) x
 !f2py x=rpn2(x)
 !f2py x=rpt2(x)
-time0 = omp_get_wtime()
+time0 = omp_get_wtime() !time the subrountine
 !    !$omp parallel
 !    !$omp single
 !        nthreads = omp_get_num_threads()
@@ -99,7 +99,7 @@ time0 = omp_get_wtime()
     !     # ghosts cells as well as the interior.  This updates the ghost
     !     # cell values to the intermediate state as needed in the following
     !     # sweep in the y-direction.
-    time1 = omp_get_wtime()
+    time1 = omp_get_wtime() !time the x-sweeps
     !$omp parallel do default(shared) private(j,i,m,q1d,dtdx1d,ma,aux1,aux2,aux3,jcom,qadd,fadd,gadd,cfl1d,work) reduction(max:cfl)
         do j = 1-num_ghost,my+num_ghost
         
@@ -190,7 +190,7 @@ time0 = omp_get_wtime()
     
     !     # perform y sweeps
     !     ==================
-    time3 = omp_get_wtime()
+    time3 = omp_get_wtime() !time the y-sweeps
     !$omp parallel do default(shared) private(i,j,m,q1d,dtdy1d,ma,aux1,aux2,aux3,icom,qadd,fadd,gadd,cfl1d,work) reduction(max:cfl)
         do i = 1-num_ghost, mx+num_ghost
         
