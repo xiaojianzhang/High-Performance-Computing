@@ -3,7 +3,7 @@
 # Directives
 #PBS -N MPI_advection_2d
 #PBS -W group_list=yetiapam 
-#PBS -l nodes=1:ppn=16:v2,walltime=00:02:00,mem=15000mb
+#PBS -l nodes=1:ppn=16:v2,walltime=00:02:00,mem=16000mb
 #PBS -M sz2553@columbia.edu
 #PBS -m abe
 #PBS -V
